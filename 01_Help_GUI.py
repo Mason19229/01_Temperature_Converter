@@ -29,7 +29,7 @@ class Converter:
     def help(self):
         print("You asked for help")
         get_help = Help(self)
-        get_help.help_text.configure(text="Help text goes here")
+        get_help.help_text_label.configure(text="Help text goes here")
 
 class Help:
     def __init__(self, partner):
@@ -61,7 +61,10 @@ class Help:
         self.help_text_label.grid(row=1)
 
         #Dismiss button (row 2)
-
+        self.dismiss_button = Button(self.help_frame, text="Dismiss",
+                                     padx=10, pady=10, command=self.help_box.destroy)
+        self.dismiss_button.grid(row=2)
+        
 # main routine
 if __name__ == "__main__":
     root = Tk()

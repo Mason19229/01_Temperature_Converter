@@ -28,6 +28,8 @@ class Converter:
     
     def help(self):
         print("You asked for help")
+        get_help = Help(self)
+        get_help.help_text.configure(text="Help text goes here")
 
 # main routine
 if __name__ == "__main__":

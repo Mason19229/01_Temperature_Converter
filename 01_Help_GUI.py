@@ -42,28 +42,35 @@ class Help:
         #Sets up child window (ie: help box)
         self.help_box = Toplevel()
 
+        #IF users press cross at top, closes help and 'releases' help button
+        self.help_box.protocol('WM_DELETE_WINDOW', partial(self.close_help, partner))
+
         #Set up GUI Frame
         self.help_frame = Frame(self.help_box, bg=background)
         self.help_frame.grid()
 
         #Set up Help heading (row 0)
-        self.help_label = Label(self.help_frame, text="Help",
-                                font=("Arial", "16", "bold"),
-                                bg=background,
-                                padx=10, pady=10)
+        self.help_label = Label(self.help_frame, text="Help / Instructions",
+                                font=("Arial", "14", "bold"),
+                                bg=background)
         self.help_label.grid(row=0)
 
         #Help text (label, row 1)
-        self.help_text_label = Label(self.help_frame, text="Help text",
-                               font=("Arial", "12", "bold"),
-                               bg=background,
-                               padx=10, pady=10)
+        self.help_text_label = Label(self.help_frame, text="Help Text", 
+                                     justify=LEFT, width=40, 
+                                     bg=background, wrap=250)
         self.help_text_label.grid(row=1)
 
         #Dismiss button (row 2)
-        self.dismiss_button = Button(self.help_frame, text="Dismiss",
-                                     padx=10, pady=10, command=self.help_box.destroy)
-        self.dismiss_button.grid(row=2)
+        self.dismiss_button = Button(self.help_frame, text="Dismiss", 
+                                     width=10, bg=background, font=("Arial", "10", "bold"),
+                                     command=partial(self.close_help, partner))
+        self.dismiss_button.grid(row=2, pady=10)
+
+    def close_help(self, partner):
+        #put help button back to normal
+        partner.help_button.config(state=NORMAL)
+        self.help_box.destroy()
         
 # main routine
 if __name__ == "__main__":

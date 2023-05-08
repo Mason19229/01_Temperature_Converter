@@ -1,11 +1,21 @@
-#Temp_Converter_Fahrenheit.py
-#Converting temperature from celsius to fahrenheit
+#Temp_Converter_Fahrenheit.py - Converting temperature from celsius to fahrenheit
 #Mason Smythe
+#09/05/2023
 
 
-celsius = int(input("Please enter the temperature in degrees Celsius: "))
+def to_f(from_c):
+    fahrenheit = (from_c * 9/5) + 32
+    return fahrenheit
 
-fahrenheit = (celsius*9/5)+32
+#Main Routine
+temperatures = [0, 40, 100]
+converted = []
 
-print(f"{fahrenheit}°F")
+for item in temperatures:
+    answer = to_f(item)
+    ans_statement = "{} degrees C is {} degrees F".format(item, answer)
+    converted.append(ans_statement)
+
+print(converted)
+
 

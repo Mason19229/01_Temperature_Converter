@@ -108,6 +108,7 @@ class Converter:
             if has_errors == "no":
                 self.answer_label.configure(text=answer, fg="blue")
                 self.temp_entry.configure(bg="white")
+            
             else:
                 self.answer_label.configure(text=answer, fg="red")
                 self.temp_entry.configure(bg=error)

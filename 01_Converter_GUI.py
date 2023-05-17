@@ -7,7 +7,10 @@ class Converter:
     def __init__(self):
         
         #formatting variables
-        background_color = "light blue"                                                        #GO THROUGH PREV VIDEO TO GET COMPLETE CORRECT CODE
+        background_color = "light blue"
+        
+        #Initialise list to hold calculation history
+        self.all_calculations = []
 
         #Converter Frame
         self.converter_frame = Frame(width=300, bg=background_color,
@@ -112,6 +115,11 @@ class Converter:
             else:
                 self.answer_label.configure(text=answer, fg="red")
                 self.temp_entry.configure(bg=error)
+
+            # Add answer to list for history
+            if answer != "Too Cold!":
+                self.all_calculations.append(answer)
+                print(self.all_calculations)
 
         except ValueError:
             self.answer_label.configure(text="Enter a number!!", fg="red")

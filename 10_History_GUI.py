@@ -10,7 +10,8 @@ class Converter:
         background_color = "light blue"       
 
         #in actual program this is blank and populated by user calculations
-        self.all_calc_list = ['0 degrees C is 32 degrees F', '40 degrees C is 104 degrees F', '12 degrees C is 53.6 degrees F', '24 degrees C is 75.2 degrees F',]
+        #self.all_calc_list = ['0 degrees C is 32 degrees F', '40 degrees C is 104 degrees F', '12 degrees C is 53.6 degrees F', '24 degrees C is 75.2 degrees F',]
+        self.all_calc_list = []
 
         #converter main screen gui
         self.converter_frame = Frame(width=600, height=600, bg=background_color)
@@ -27,6 +28,9 @@ class Converter:
         self.history_button = Button(self.converter_frame, text="history", font="Arial 14", 
                                   padx=10, pady=10, command=lambda: self.history(self.all_calc_list),)
         self.history_button.grid(row=1)
+
+        if len(self.all_calc_list) == 0:
+            self.history_button.config(state=DISABLED)
 
     
     def history(self, calc_history):

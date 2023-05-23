@@ -1,5 +1,6 @@
 from tkinter import *
 from functools import partial #to prevent unwanted windows
+import re
 
 import random
 
@@ -96,7 +97,7 @@ class Converter:
                 answer = "{} degrees C is {} degrees F".format(to_convert, fahrenheit)
 
             # Check and convert to Celsius
-            if low == -459 and to_convert >= low:
+            elif low == -459 and to_convert >= low:
                 celsius = (to_convert - 32) * 5/9
                 to_convert = self.round_it(to_convert)
                 celsius = self.round_it(celsius)
@@ -117,9 +118,9 @@ class Converter:
                 self.temp_entry.configure(bg=error)
 
             # Add answer to list for history
-            if answer != "Too Cold!":
+            if has_errors != "yes":
                 self.all_calc_list.append(answer)
-                print(self.all_calc_list)
+                self.history_button.config(state=NORMAL)
 
         except ValueError:
             self.answer_label.configure(text="Enter a number!!", fg="red")
@@ -248,17 +249,72 @@ class Export:
                                     font="Arial 14 bold", justify=CENTER)
         self.filename_entry.grid(row=3, pady=10)
 
+        # Error message labels (initially blank, row 4
+        self.save_error_label = Label(self.export_frame, text="", fg="maroon", bg=background)
+        self.save_error_label.grid(row=4)
+
         # Save / Cancel frame (row 4)
         self.save_cancel_frame = Frame(self.export_frame)
         self.save_cancel_frame.grid(row=5, pady=10)
 
         # Save / Cancel buttons (row 0 of save_cancel_frame)
-        self.save_button = Button(self.save_cancel_frame, text="Save")
+        self.save_button = Button(self.save_cancel_frame, text="Save", command=partial(lambda: self.save_history(partner, calc_history)))
         self.save_button.grid(row=0, column=0)
 
         self.cancel_button = Button(self.save_cancel_frame, text="Cancel",
                                     command=partial(self.close_export, partner))
         self.cancel_button.grid(row=0, column=1)
+
+    def save_history(self, partner, calc_history):
+
+        # regular expression to check filename is valid
+        valid_char = "[A-Za-z0-9_]"
+        has_error = "no"
+
+        filename = self.filename_entry.get()
+        print(filename)
+
+        for letter in filename:
+            if re.match(valid_char, letter):
+                continue
+
+            elif letter == " ":
+                problem = "(no spaces allowed)"
+
+            else:
+                problem = ("(no {}'s allowed)".format(letter))
+            
+            has_error = "yes"
+            break
+
+        if filename == "":
+            problem = "can't be blank"
+            has_error = "yes"
+        
+        if has_error == "yes":
+            #display error message
+            self.save_error_label.config(text="Invalid filename - {}".format(problem))
+            #change entry box background to pink
+            self.filename_entry.config(bg="ffafaf")
+            print()
+
+        else:
+            #if there are no errors, generate text file and then close dialogue
+            #add .txt suffix
+            filename = filename + ".txt"
+
+            #create file to hold data
+            f = open(filename, "w+")
+
+            #add new line at end of each item
+            for item in calc_history:
+                f.write(item + "\n")
+
+            #close file
+            f.close()
+
+            #close dialogue
+            self.close_export(partner)
 
     def close_export(self, partner):
         #put export button back to normal

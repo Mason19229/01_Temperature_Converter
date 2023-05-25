@@ -71,10 +71,13 @@ class Converter:
                                      padx=10, pady=10)
         self.history_button.grid(row=0, column=0)
 
+        if len(self.all_calc_list) == 0:
+            self.history_button.config(state=DISABLED)
+
             #Help button
         self.help_button = Button(self.h_buttons_frame, text="Help",
                                   font="Arial 10 bold", bg="grey68",
-                                  padx=10, pady=10)
+                                  padx=10, pady=10, command=self.help)
         self.help_button.grid(row=0, column=1)
 
     def temp_convert(self, low):
@@ -136,6 +139,10 @@ class Converter:
     
     def history(self, calc_history):
         History(self, calc_history)
+
+    def help(self):
+        get_help = Help(self)
+        get_help.help_text_label.configure(text="Please enter a number in the box and then push one of the buttons to convert number to either degrees C or degrees F. \n\nThe Calculation History area shows up to seven past calculations (most recent at the top). \n\nYou can also export your full calculation history to a text file if desired.")
 
 class History:
     def __init__(self, partner, calc_history):
@@ -320,6 +327,47 @@ class Export:
         #put export button back to normal
         partner.export_button.config(state=NORMAL)
         self.export_box.destroy()
+
+class Help:
+    def __init__(self, partner):
+
+        background = "orange"
+
+        #Disable help button
+        partner.help_button.config(state=DISABLED)
+
+        #Sets up child window (ie: help box)
+        self.help_box = Toplevel()
+
+        #IF users press cross at top, closes help and 'releases' help button
+        self.help_box.protocol('WM_DELETE_WINDOW', partial(self.close_help, partner))
+
+        #Set up GUI Frame
+        self.help_frame = Frame(self.help_box, bg=background)
+        self.help_frame.grid()
+
+        #Set up Help heading (row 0)
+        self.help_label = Label(self.help_frame, text="Help / Instructions",
+                                font=("Arial", "14", "bold"),
+                                bg=background)
+        self.help_label.grid(row=0)
+
+        #Help text (label, row 1)
+        self.help_text_label = Label(self.help_frame, text="Help Text", 
+                                    justify=LEFT, width=40, 
+                                    bg=background, wrap=250)
+        self.help_text_label.grid(row=1)
+
+        #Dismiss button (row 2)
+        self.dismiss_button = Button(self.help_frame, text="Dismiss", 
+                                    width=10, bg=background, font=("Arial", "10", "bold"),
+                                    command=partial(self.close_help, partner))
+        self.dismiss_button.grid(row=2, pady=10)
+
+    def close_help(self, partner):
+        #put help button back to normal
+        partner.help_button.config(state=NORMAL)
+        self.help_box.destroy()
 
 # main routine
 if __name__ == "__main__":
